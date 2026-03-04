@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChekScan - Résultats de l'OCR</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .result-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .result-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="glass-header">
+        <div class="container nav-wrapper">
+            <div class="brand-logo">
+                <h1>Chek<span>Scan</span></h1>
+            </div>
+            <div class="nav-actions">
+                <a href="/" class="btn btn-outline" style="text-decoration: none;">Nouveau Scan</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-layout">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2>Analyse Terminée avec Succès 🎉</h2>
+            <p>Score de confiance IA : <strong>{{ confidence }}%</strong></p>
+        </div>
+
+        <div class="result-container">
+            <!-- Image visualization -->
+            <section class="visual-panel">
+                <div class="status-card glass-panel h-full">
+                    <div class="status-header">
+                        <h4>Texte Brut Extrait (Tesseract)</h4>
+                    </div>
+                    <div class="scan-logs"
+                        style="max-height: 500px; overflow-y: auto; background: #000; padding: 1rem; border-radius: 8px; font-family: monospace; color: #0f0; white-space: pre-wrap;">
+                        {{ raw_text }}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Extracted Data Form -->
+            <section class="data-panel">
+                <div class="data-card glass-panel">
+                    <div class="card-header">
+                        <h2 id="lblDataTitle">Données Extraites</h2>
+                        <p class="text-sm">Champs reconnus par nos expressions régulières</p>
+                    </div>
+
+                    <form class="modern-form">
+                        <!-- Bank Info Row -->
+                        <div class="form-row">
+                            <div class="form-group flex-2">
+                                <label>Banque Associée</label>
+                                <div class="input-wrapper with-icon">
+                                    <span class="input-icon">🏦</span>
+                                    <input type="text" value="{{ data.bankName }}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group flex-1">
+                                <label>Code Banque</label>
+                                <input type="text" class="text-center font-mono" value="{{ data.bankCode }}" readonly>
+                            </div>
+                        </div>
+
+                        <!-- Account Row -->
+                        <div class="form-row">
+                            <div class="form-group flex-1">
+                                <label>Guichet</label>
+                                <input type="text" class="font-mono" value="{{ data.branchCode }}" readonly>
+                            </div>
+                            <div class="form-group flex-2">
+                                <label>N° de Compte</label>
+                                <input type="text" class="font-mono" value="{{ data.accountNum }}" readonly>
+                            </div>
+                        </div>
+
+                        <!-- Money & Check Identity Row -->
+                        <div class="form-row">
+                            <div class="form-group flex-1 border-focus focus-success">
+                                <label class="highlight-label">Montant (MAD)</label>
+                                <input type="text" class="amount-input" value="{{ data.amountNum }}" readonly>
+                            </div>
+                            <div class="form-group flex-1">
+                                <label>N° Chèque</label>
+                                <input type="text" class="font-mono" value="{{ data.checkNum }}" readonly>
+                            </div>
+                        </div>
+
+                        <!-- Date & Beneficiary Row -->
+                        <div class="form-row">
+                            <div class="form-group flex-1">
+                                <label>Date</label>
+                                <input type="text" value="{{ data.date }}" readonly>
+                            </div>
+                            <div class="form-group flex-2">
+                                <label>Bénéficiaire</label>
+                                <input type="text" value="{{ data.beneficiary }}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Montant en toutes lettres</label>
+                            <textarea rows="2" readonly>{{ data.amountWords }}</textarea>
+                        </div>
+
+                        <div class="form-group bg-darker p-3 rounded-lg mt-2">
+                            <label class="text-white-50">Ligne Magnétique MICR</label>
+                            <input type="text" class="micr-input" value="{{ data.micr }}" readonly>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>
