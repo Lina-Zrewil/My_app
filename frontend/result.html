@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats OCR - ChekScan</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="glass-header">
+        <div class="container nav-wrapper">
+            <div class="brand-logo">
+                <h1>Chek<span>Scan</span></h1>
+            </div>
+            <div class="nav-actions">
+                <a href="/" class="btn btn-outline" style="text-decoration:none;">Nouveau Scan</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-layout">
+        <section class="visual-panel">
+            <h2>Données Extrayées du Chèque</h2>
+            <div class="subtitle">Nom du fichier : {{ filename }}</div>
+
+            {% if error %}
+            <div class="error-box mt-4">
+                <strong>Erreur OCR :</strong> {{ error }}
+            </div>
+            {% else %}
+
+            <div class="data-card glass-panel mt-4">
+                <form class="modern-form">
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label>Banque Associée</label>
+                            <input type="text" value="{{ data.bankName }}" readonly>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label class="highlight-label">Montant (MAD)</label>
+                            <input type="text" value="{{ data.amountNum }}" readonly class="amount-input">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label>Date Encodée</label>
+                            <input type="text" value="{{ data.date }}" readonly>
+                        </div>
+                        <div class="form-group flex-2">
+                            <label>Ligne Magnétique MICR</label>
+                            <input type="text" value="{{ data.micr }}" readonly class="font-mono">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="/" class="btn btn-primary btn-lg w-full" style="text-decoration:none; text-align:center;">
+                    Retour au Scanner
+                </a>
+            </div>
+        </section>
+
+        <!-- DEBUG OCR -->
+        <section class="info-panel">
+            <div class="glass-panel text-sm font-mono mt-4"
+                style="background: rgba(0,0,0,0.8); color: lime; padding: 15px; border-radius: 8px; overflow-y:scroll; max-height: 400px;">
+                <h4 style="color:white; margin-bottom: 10px;">[DEBUG] Texte Brut Extrait :</h4>
+                <pre style="white-space: pre-wrap;">{{ raw_text }}</pre>
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>

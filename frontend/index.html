@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChekScan - OCR Bancaire Sans JS</title>
+    <!-- On utilise /static pour servir styles.css par FastAPI -->
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="glass-header">
+        <div class="container nav-wrapper">
+            <div class="brand-logo">
+                <h1>Chek<span>Scan</span></h1>
+            </div>
+            <div class="nav-actions">
+                <span class="badge">Version 100% HTML/CSS/Python</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-layout">
+        <section class="visual-panel">
+            <div class="intro-text">
+                <h2>Numérisation Intelligente</h2>
+                <p>Déposez votre chèque et notre intelligence artificielle (Tesseract) en extraira automatiquement les
+                    informations clés <strong>sans aucune intervention JavaScript</strong>.</p>
+            </div>
+
+            <!-- FORMULAIRE SANS JS -->
+            <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form glass-panel">
+                <div class="upload-zone">
+                    <div class="upload-icon">📸</div>
+                    <h3>Sélectionnez l'image du chèque</h3>
+                    <p class="subtitle">(Formats supportés: JPG, PNG)</p>
+
+                    <!-- Input file natif (styles via CSS) -->
+                    <label class="custom-file-upload">
+                        <input type="file" name="file" accept="image/*" required>
+                        Parcourir les fichiers
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-full mt-4">
+                    🔍 Lancer l'analyse OCR
+                </button>
+            </form>
+        </section>
+
+        <section class="info-panel">
+            <div class="glass-panel chatbot-mock">
+                <div class="chat-header">
+                    🤖 Assistant
+                </div>
+                <div class="chat-body">
+                    <div class="msg msg-bot">
+                        Bonjour ! Je suis l'assistant ChekScan. Je fonctionne entièrement grâce au backend Python.
+                    </div>
+                    <div class="msg msg-bot">
+                        Soumettez simplement le formulaire à gauche pour voir la magie opérer !
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>
