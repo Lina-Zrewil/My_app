@@ -8,8 +8,12 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Install system dependencies including Tesseract OCR
-RUN apt-get update && apt-get install -y tesseract-ocr tesseract-ocr-fra tesseract-ocr-ara libgl1-mesa-glx && rm -rf /var/lib/apt/lists/*
-
+RUN apt-get update && apt-get install -y \
+    tesseract-ocr \
+    tesseract-ocr-fra \
+    tesseract-ocr-ara \
+    libgl1 \
+    && apt-get clean
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
