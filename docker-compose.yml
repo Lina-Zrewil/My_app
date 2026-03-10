@@ -7,6 +7,9 @@ services:
     # Montons le dossier frontend dans le backend pour que Jinja2 puisse lire les HTML
     volumes:
       - ./frontend:/app/frontend
+      - ./backend/data:/app/data
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
     ports:
       - "8000:8000"
     restart: unless-stopped

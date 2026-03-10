@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    # IMPORTANT: Assure-toi que ton nom d'utilisateur GitHub est en MINUSCULES ici
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER_LOWERCASE}/maghreb-check-ai-backend:latest
+    # Assuming the data folder needs to be persistent locally
+    volumes:
+      - ./backend/data:/app/data
+    environment:
+      # You can manage this via an .env file locally
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    restart: unless-stopped
+    # We don't expose ports directly to the host anymore, cloudflared handles it
+
+  frontend:
+    # IMPORTANT: Assure-toi que ton nom d'utilisateur GitHub est en MINUSCULES ici
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER_LOWERCASE}/maghreb-check-ai-frontend:latest
+    depends_on:
+      - backend
+    restart: unless-stopped
+    # Same here, no need to expose ports publicly
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - backend

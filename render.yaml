@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: chekscan-app
+    env: docker
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon 
+    envVars:
+      - key: OPENROUTER_API_KEY
+        value: ${OPENROUTER_API_KEY}
+      - key: PORT
+        value: 10000
+    healthCheckPath: /health

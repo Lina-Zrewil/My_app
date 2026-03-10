@@ -1,0 +1,33 @@
+2026-03-10 20:05:25,637 - ChekScan - INFO - CHAT_REQUEST: model=zhipu/glm-4-9b-chat, user_message='guider moi'
+2026-03-10 20:05:31,519 - ChekScan - INFO - CHAT_RESPONSE: status=400
+2026-03-10 20:05:31,522 - ChekScan - ERROR - CHAT_API_ERROR: status=400, body={"error":{"message":"zhipu/glm-4-9b-chat is not a valid model ID","code":400},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:05:31,539 - ChekScan - INFO - CHAT_REQUEST: model=zhipu/glm-4-9b-chat, user_message='guider moi'
+2026-03-10 20:05:32,030 - ChekScan - INFO - CHAT_RESPONSE: status=400
+2026-03-10 20:05:32,032 - ChekScan - ERROR - CHAT_API_ERROR: status=400, body={"error":{"message":"zhipu/glm-4-9b-chat is not a valid model ID","code":400},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:05:32,073 - ChekScan - INFO - CHAT_REQUEST: model=zhipu/glm-4-9b-chat, user_message='guider moi'
+2026-03-10 20:05:33,774 - ChekScan - INFO - CHAT_RESPONSE: status=400
+2026-03-10 20:05:33,777 - ChekScan - ERROR - CHAT_API_ERROR: status=400, body={"error":{"message":"zhipu/glm-4-9b-chat is not a valid model ID","code":400},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:05:33,809 - ChekScan - INFO - CHAT_REQUEST: model=zhipu/glm-4-9b-chat, user_message='guider moi'
+2026-03-10 20:05:34,254 - ChekScan - INFO - CHAT_RESPONSE: status=400
+2026-03-10 20:05:34,255 - ChekScan - ERROR - CHAT_API_ERROR: status=400, body={"error":{"message":"zhipu/glm-4-9b-chat is not a valid model ID","code":400},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:09:35,234 - ChekScan - INFO - CHAT_REQUEST: model=z-ai/glm-4-5-air-free, user_message='guider moi'
+2026-03-10 20:09:35,851 - ChekScan - INFO - CHAT_RESPONSE: status=400
+2026-03-10 20:09:35,853 - ChekScan - ERROR - CHAT_API_ERROR: status=400, body={"error":{"message":"z-ai/glm-4-5-air-free is not a valid model ID","code":400},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:28:38,415 - ChekScan - INFO - CHAT_REQUEST: model=google/gemini-2.0-flash-exp:free, user_message='guider moi pour le scan'
+2026-03-10 20:28:39,054 - ChekScan - INFO - CHAT_RESPONSE: status=404
+2026-03-10 20:28:39,057 - ChekScan - ERROR - CHAT_API_ERROR: status=404, body={"error":{"message":"No endpoints found for google/gemini-2.0-flash-exp:free.","code":404},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:37:05,469 - ChekScan - INFO - CHAT_REQUEST: model=google/gemini-2.0-flash-exp:free, user_message='bonjour'
+2026-03-10 20:37:06,305 - ChekScan - INFO - CHAT_RESPONSE: status=404
+2026-03-10 20:37:06,308 - ChekScan - ERROR - CHAT_API_ERROR: status=404, body={"error":{"message":"No endpoints found for google/gemini-2.0-flash-exp:free.","code":404},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:47:07,890 - ChekScan - INFO - CHAT_TRY: model=z-ai/glm-4.5-air:free
+2026-03-10 20:47:09,275 - ChekScan - ERROR - CHAT_FAIL: model=z-ai/glm-4.5-air:free, status=429, body={"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"z-ai/glm-4.5-air:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"Z.AI","is_byok":false}},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:47:09,276 - ChekScan - INFO - CHAT_TRY: model=openrouter/free
+2026-03-10 20:47:21,910 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/free
+2026-03-10 20:47:21,922 - ChekScan - INFO - CHAT_TRY: model=z-ai/glm-4.5-air:free
+2026-03-10 20:47:24,029 - ChekScan - ERROR - CHAT_FAIL: model=z-ai/glm-4.5-air:free, status=429, body={"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"z-ai/glm-4.5-air:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"Z.AI","is_byok":false}},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-10 20:47:24,030 - ChekScan - INFO - CHAT_TRY: model=openrouter/free
+2026-03-10 20:47:27,757 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/free
+2026-03-10 20:47:51,803 - ChekScan - INFO - CHAT_TRY: model=z-ai/glm-4.5-air:free
+2026-03-10 20:48:01,907 - ChekScan - INFO - CHAT_SUCCESS: model=z-ai/glm-4.5-air:free
+2026-03-10 20:48:34,602 - ChekScan - INFO - CHAT_TRY: model=z-ai/glm-4.5-air:free
+2026-03-10 20:48:50,285 - ChekScan - INFO - CHAT_SUCCESS: model=z-ai/glm-4.5-air:free

@@ -1,0 +1,4 @@
+# Prioritize Python by treating frontend as documentation/vendored
+frontend/* linguist-documentation
+backend/*.py linguist-detectable=true
+backend/documentation_core.py linguist-detectable=true

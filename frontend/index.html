@@ -1,24 +1,49 @@
 <!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<html lang="{{ lang }}" dir="{{ labels.dir }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChekScan - OCR Bancaire Sans JS</title>
-    <!-- On utilise /static pour servir styles.css par FastAPI -->
+    <title>{{ labels.title }}</title>
+    <link rel="icon" type="image/png" href="/static/assets/logo.png">
     <link rel="stylesheet" href="/static/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .logo-img {
+            width: 20px !important;
+            height: 20px !important;
+            max-width: 20px !important;
+            margin-right: 8px !important;
+        }
+
+        .brand-logo {
+            display: flex !important;
+            align-items: center !important;
+        }
+    </style>
 </head>
 
-<body>
+<body class="{{ theme_class }}">
 
     <header class="glass-header">
         <div class="container nav-wrapper">
-            <div class="brand-logo">
-                <h1>Chek<span>Scan</span></h1>
+            <div class="brand-logo" style="display:flex; align-items:center;">
+                <img src="/static/assets/logo.png" alt="" class="logo-img" style="width:20px; height:20px;">
+                <h1 style="font-size: 1.1rem; margin:0;">Chek<span style="color:var(--primary);">Scan</span></h1>
             </div>
-            <div class="nav-actions">
-                <span class="badge">Version 100% HTML/CSS/Python</span>
+            <div class="nav-actions" style="display:flex; gap:12px; align-items:center;">
+                <a href="/set-theme?theme={{ 'dark' if theme == 'light' else 'light' }}" class="btn btn-outline"
+                    style="text-decoration:none; padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 10px;">
+                    {{ labels.dark_mode if theme == 'light' else labels.light_mode }}
+                </a>
+                <a href="/set-lang?lang={{ 'ar' if lang == 'fr' else 'fr' }}" class="btn btn-outline"
+                    style="text-decoration:none; padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 10px;">
+                    {{ labels.lang_ar if lang == 'fr' else labels.lang_fr }}
+                </a>
+                <a href="/history" class="btn btn-primary"
+                    style="text-decoration:none; padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 10px;">
+                    {{ labels.history }}
+                </a>
             </div>
         </div>
     </header>
@@ -26,44 +51,64 @@
     <main class="container main-layout">
         <section class="visual-panel">
             <div class="intro-text">
-                <h2>Numérisation Intelligente</h2>
-                <p>Déposez votre chèque et notre intelligence artificielle (Tesseract) en extraira automatiquement les
-                    informations clés <strong>sans aucune intervention JavaScript</strong>.</p>
+                <h2>{{ labels.intro_title }}</h2>
+                <p>{{ labels.intro_text | safe }}</p>
             </div>
 
-            <!-- FORMULAIRE SANS JS -->
-            <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form glass-panel">
+            <!-- FORM REPAIRED -->
+            <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form glass-panel"
+                style="padding: 2.5rem;">
                 <div class="upload-zone">
                     <div class="upload-icon">📸</div>
-                    <h3>Sélectionnez l'image du chèque</h3>
-                    <p class="subtitle">(Formats supportés: JPG, PNG)</p>
+                    <h3>{{ labels.upload_title }}</h3>
+                    <p class="subtitle" style="margin-bottom: 1.5rem;">{{ labels.upload_subtitle }}</p>
 
-                    <!-- Input file natif (styles via CSS) -->
-                    <label class="custom-file-upload">
+                    <label class="custom-file-upload" style="display: block; width: fit-content; margin: 0 auto;">
                         <input type="file" name="file" accept="image/*" required>
-                        Parcourir les fichiers
+                        {{ labels.upload_btn }}
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-lg w-full mt-4">
-                    🔍 Lancer l'analyse OCR
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; margin-top: 2rem; padding: 1rem; justify-content: center;">
+                    {{ labels.submit_btn }}
                 </button>
             </form>
         </section>
 
+        <!-- CHATBOT -->
         <section class="info-panel">
             <div class="glass-panel chatbot-mock">
-                <div class="chat-header">
-                    🤖 Assistant
+                <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>{{ labels.chat_header }}</span>
+                    {% if chats %}
+                    <a href="/clear_chat" style="color:var(--text-muted); text-decoration:none; font-size:12px;">🗑️</a>
+                    {% endif %}
                 </div>
-                <div class="chat-body">
+                <div class="chat-body"
+                    style="overflow-y:auto; flex:1; max-height:400px; display:flex; flex-direction:column; justify-content:flex-end;">
+
+                    {% if not chats %}
                     <div class="msg msg-bot">
-                        Bonjour ! Je suis l'assistant ChekScan. Je fonctionne entièrement grâce au backend Python.
+                        {{ labels.bot_welcome }}
                     </div>
-                    <div class="msg msg-bot">
-                        Soumettez simplement le formulaire à gauche pour voir la magie opérer !
-                    </div>
+                    {% else %}
+                    {% for chat in chats %}
+                    {% if chat.role == 'bot' %}
+                    <div class="msg msg-bot" style="margin-top:10px;">{{ chat.text }}</div>
+                    {% else %}
+                    <div class="msg msg-user" style="margin-top:10px;">{{ chat.text }}</div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
                 </div>
+
+                <form action="/chat" method="POST" class="chat-form"
+                    style="display:flex; gap:10px; margin-top:15px; padding-top:10px; border-top:1px solid var(--glass-border);">
+                    <input type="text" name="message" required placeholder="{{ labels.chat_placeholder }}"
+                        style="flex:1; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--glass-border); background:rgba(0,0,0,0.2); color:var(--text-main);">
+                    <button type="submit" class="btn btn-primary" style="padding:10px 15px;">{{ labels.send }}</button>
+                </form>
             </div>
         </section>
     </main>

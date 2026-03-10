@@ -1,31 +1,51 @@
 <!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<html lang="{{ lang }}" dir="{{ labels.dir }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultats OCR - ChekScan</title>
+    <title>{{ labels.title }} - Résultat</title>
+    <link rel="icon" type="image/png" href="/static/assets/logo.png">
     <link rel="stylesheet" href="/static/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .logo-img {
+            width: 20px !important;
+            height: 20px !important;
+            max-width: 20px !important;
+            margin-right: 8px !important;
+        }
+
+        .brand-logo {
+            display: flex !important;
+            align-items: center !important;
+        }
+    </style>
 </head>
 
-<body>
+<body class="{{ theme_class }}">
 
     <header class="glass-header">
         <div class="container nav-wrapper">
-            <div class="brand-logo">
-                <h1>Chek<span>Scan</span></h1>
+            <div class="brand-logo" style="display:flex; align-items:center;">
+                <img src="/static/assets/logo.png" alt="" class="logo-img" style="width:20px; height:20px;">
+                <h1 style="font-size: 1.1rem; margin:0;">Chek<span style="color:var(--primary);">Scan</span></h1>
             </div>
-            <div class="nav-actions">
-                <a href="/" class="btn btn-outline" style="text-decoration:none;">Nouveau Scan</a>
+            <div class="nav-actions" style="display:flex; gap:12px; align-items:center;">
+                <a href="/history" class="btn btn-outline"
+                    style="text-decoration:none; padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 10px;">{{
+                    labels.history }}</a>
+                <a href="/" class="btn btn-primary"
+                    style="text-decoration:none; padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 10px;">{{
+                    labels.new_scan }}</a>
             </div>
         </div>
     </header>
 
-    <main class="container main-layout">
+    <main class="container main-layout" style="grid-template-columns: 1fr; max-width:800px;">
         <section class="visual-panel">
-            <h2>Données Extrayées du Chèque</h2>
-            <div class="subtitle">Nom du fichier : {{ filename }}</div>
+            <h2>{{ labels.scan_results }}</h2>
+            <div class="subtitle">{{ labels.filename }} {{ filename }}</div>
 
             {% if error %}
             <div class="error-box mt-4">
@@ -37,43 +57,57 @@
                 <form class="modern-form">
                     <div class="form-row">
                         <div class="form-group flex-2">
-                            <label>Banque Associée</label>
+                            <label>{{ labels.bank }}</label>
                             <input type="text" value="{{ data.bankName }}" readonly>
                         </div>
                         <div class="form-group flex-1">
-                            <label class="highlight-label">Montant (MAD)</label>
+                            <label class="highlight-label">{{ labels.amount }}</label>
                             <input type="text" value="{{ data.amountNum }}" readonly class="amount-input">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group flex-1">
-                            <label>Date Encodée</label>
+                            <label>{{ labels.date }}</label>
                             <input type="text" value="{{ data.date }}" readonly>
                         </div>
                         <div class="form-group flex-2">
-                            <label>Ligne Magnétique MICR</label>
-                            <input type="text" value="{{ data.micr }}" readonly class="font-mono">
+                            <label>{{ labels.micr }}</label>
+                            <input type="text" value="{{ data.micr }}" readonly class="font-mono"
+                                style="direction:ltr; text-align:left;">
                         </div>
                     </div>
                 </form>
+
+                <!-- SAVE SCAN FORM -->
+                <form action="/save_scan" method="POST" style="margin-top:20px;">
+                    <input type="hidden" name="filename" value="{{ filename }}">
+                    <input type="hidden" name="bank_name" value="{{ data.bankName }}">
+                    <input type="hidden" name="amount" value="{{ data.amountNum }}">
+                    <input type="hidden" name="date" value="{{ data.date }}">
+                    <input type="hidden" name="micr" value="{{ data.micr }}">
+                    <button type="submit" class="btn w-full"
+                        style="background:#10b981; color:white; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
+                        {{ labels.save_scan }}
+                    </button>
+                </form>
+
             </div>
             {% endif %}
 
-            <div class="mt-4">
-                <a href="/" class="btn btn-primary btn-lg w-full" style="text-decoration:none; text-align:center;">
-                    Retour au Scanner
+            <div class="mt-4" style="text-align:center;">
+                <a href="/" class="btn btn-primary btn-lg w-full" style="text-decoration:none;">
+                    {{ labels.back_home }}
                 </a>
             </div>
-        </section>
 
-        <!-- DEBUG OCR -->
-        <section class="info-panel">
+            <!-- DEBUG OCR -->
             <div class="glass-panel text-sm font-mono mt-4"
-                style="background: rgba(0,0,0,0.8); color: lime; padding: 15px; border-radius: 8px; overflow-y:scroll; max-height: 400px;">
-                <h4 style="color:white; margin-bottom: 10px;">[DEBUG] Texte Brut Extrait :</h4>
+                style="background: rgba(0,0,0,0.8); color: lime; padding: 15px; border-radius: 8px; overflow-y:scroll; max-height: 200px; direction:ltr; text-align:left;">
+                <h4 style="color:white; margin-bottom: 10px;">[DEBUG] RAW TEXT :</h4>
                 <pre style="white-space: pre-wrap;">{{ raw_text }}</pre>
             </div>
+
         </section>
     </main>
 
