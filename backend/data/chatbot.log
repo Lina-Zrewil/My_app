@@ -44,3 +44,5 @@
 2026-03-13 20:42:54,530 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=400 body={"error":{"message":"google/gemini-2.0-flash-lite-preview-02-05:free is not a valid model ID","code":400},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
 2026-03-13 20:43:13,165 - ChekScan - INFO - IMAGE_RESIZED: 270x148 -> 2000x1096
 2026-03-13 20:43:16,121 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=400 body={"error":{"message":"google/gemini-2.0-flash-lite-preview-02-05:free is not a valid model ID","code":400},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-13 21:12:51,149 - ChekScan - INFO - IMAGE_RESIZED: 800x422 -> 2000x1055
+2026-03-13 21:12:53,459 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=401 body={"error":{"message":"User not found.","code":401}}

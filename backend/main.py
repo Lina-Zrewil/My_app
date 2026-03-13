@@ -156,7 +156,7 @@ def extract_cheque_data(text: str) -> dict:
                 "X-Title": "ChekScan AI Extraction"
             }
             payload = {
-                "model": "google/gemini-2.0-flash-lite-preview-02-05:free",
+                "model": "google/gemini-2.0-flash-exp:free",
                 "messages": [{"role": "user", "content": prompt}]
             }
             
@@ -172,10 +172,22 @@ def extract_cheque_data(text: str) -> dict:
                 ai_data = json.loads(content)
                 logger.info(f"AI_EXTRACTION_SUCCESS: {ai_data}")
                 
-                # On utilise les résultats de l'IA s'ils semblent valides
-                for key in data:
-                    if ai_data.get(key) and ai_data[key] not in ["Non trouvé", "Non détectée", ""]:
-                        data[key] = ai_data[key]
+                # Mapping pour gérer camelCase ET snake_case
+                key_map = {
+                    "bank_name": ["bank_name", "bankName", "bank"],
+                    "amount": ["amount", "amountNum", "montant"],
+                    "payee": ["payee", "beneficiary", "beneficiaire"],
+                    "amount_words": ["amount_words", "amountWords", "montant_lettres"],
+                    "date": ["date"],
+                    "place": ["place", "lieu"],
+                    "micr": ["micr", "gencode"]
+                }
+                
+                for target_key, possible_keys in key_map.items():
+                    for pk in possible_keys:
+                        if ai_data.get(pk) and ai_data[pk] not in ["Non trouvé", "Non détectée", ""]:
+                            data[target_key] = str(ai_data[pk])
+                            break # On a trouvé une valeur pour ce champ
             else:
                 logger.error(f"AI_EXTRACTION_FAIL: code={response.status_code} body={response.text}")
                         
