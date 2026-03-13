@@ -2,7 +2,7 @@ import os
 import re
 import logging
 import pytesseract
-from PIL import Image
+from PIL import Image, ImageOps, ImageEnhance
 from io import BytesIO
 
 from fastapi import FastAPI, File, UploadFile, Request, Form, Response
@@ -150,7 +150,7 @@ def extract_cheque_data(text: str) -> dict:
                 "X-Title": "ChekScan AI Extraction"
             }
             payload = {
-                "model": "openrouter/free",
+                "model": "google/gemini-2.0-flash-lite-preview-02-05:free",
                 "messages": [{"role": "user", "content": prompt}]
             }
             
@@ -267,7 +267,18 @@ async def process_check(request: Request, file: UploadFile = File(...)):
     try:
         contents = await file.read()
         image = Image.open(BytesIO(contents))
-        extracted_text = pytesseract.image_to_string(image, lang='fra+ara')
+        
+        # --- IMAGE PREPROCESSING FOR BETTER OCR ---
+        # 1. Convert to grayscale
+        gray_image = ImageOps.grayscale(image)
+        # 2. Increase contrast
+        enhancer = ImageEnhance.Contrast(gray_image)
+        contrast_image = enhancer.enhance(2.0)
+        # 3. Increase sharpness
+        sharpener = ImageEnhance.Sharpness(contrast_image)
+        final_image = sharpener.enhance(2.0)
+        
+        extracted_text = pytesseract.image_to_string(final_image, lang='fra+ara')
         cheque_data = extract_cheque_data(extracted_text)
         
         ctx.update({
