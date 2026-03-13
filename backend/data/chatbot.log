@@ -31,3 +31,5 @@
 2026-03-10 20:48:01,907 - ChekScan - INFO - CHAT_SUCCESS: model=z-ai/glm-4.5-air:free
 2026-03-10 20:48:34,602 - ChekScan - INFO - CHAT_TRY: model=z-ai/glm-4.5-air:free
 2026-03-10 20:48:50,285 - ChekScan - INFO - CHAT_SUCCESS: model=z-ai/glm-4.5-air:free
+2026-03-10 23:29:10,318 - ChekScan - INFO - CHAT_TRY: model=z-ai/glm-4.5-air:free
+2026-03-10 23:29:18,406 - ChekScan - INFO - CHAT_SUCCESS: model=z-ai/glm-4.5-air:free

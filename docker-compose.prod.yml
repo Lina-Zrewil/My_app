@@ -11,7 +11,8 @@ services:
       # You can manage this via an .env file locally
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
     restart: unless-stopped
-    # We don't expose ports directly to the host anymore, cloudflared handles it
+    ports:
+      - "8000:8000"
 
   frontend:
     # IMPORTANT: Assure-toi que ton nom d'utilisateur GitHub est en MINUSCULES ici
@@ -19,7 +20,8 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
-    # Same here, no need to expose ports publicly
+    ports:
+      - "8080:80"
 
   cloudflared:
     image: cloudflare/cloudflared:latest

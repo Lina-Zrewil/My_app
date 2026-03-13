@@ -10,6 +10,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
+import json
 
 from database import init_db, save_scan_db, get_all_scans
 from labels import LABELS
@@ -91,6 +92,7 @@ def get_context(request: Request):
     }
 
 def extract_cheque_data(text: str) -> dict:
+    # 1. Regex Baseline (Fallback)
     data = {
         "bankName": "Non détectée",
         "amountNum": "Non trouvé",
@@ -107,6 +109,8 @@ def extract_cheque_data(text: str) -> dict:
         data["bankName"] = "BOA / BMCE"
     elif "populaire" in lower_text or "bcp" in lower_text:
         data["bankName"] = "Banque Populaire"
+    elif "generale" in lower_text or "sg" in lower_text:
+        data["bankName"] = "Société Générale"
 
     amount_match = re.search(r'(?:#|dh|mad)?\s*(\d{1,3}(?:[ .,]\d{3})*(?:[.,]\d{2}))\s*(?:#|dh|mad)?', text, re.IGNORECASE)
     if amount_match:
@@ -120,6 +124,58 @@ def extract_cheque_data(text: str) -> dict:
     if micr_match:
         data["micr"] = micr_match.group(1).strip()
 
+    # 2. AI Improvement (Power Up)
+    if OPENROUTER_API_KEY:
+        try:
+            prompt = f"""
+            Tu es un expert en lecture de chèques marocains. Analyse ce texte OCR et extrait les données.
+            Réponds UNIQUEMENT avec un objet JSON structuré comme ceci:
+            {{
+              "bankName": "Nom de la banque",
+              "amountNum": "Le montant en chiffres (ex: 1250.00)",
+              "date": "La date au format JJ/MM/AAAA",
+              "micr": "Les chiffres magnétiques en bas du chèque"
+            }}
+            Si une donnée est manquante, mets "Non trouvé".
+            
+            Texte OCR:
+            ---
+            {text}
+            ---
+            """
+            
+            headers = {
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json",
+                "X-Title": "ChekScan AI Extraction"
+            }
+            payload = {
+                "model": "openrouter/free",
+                "messages": [{"role": "user", "content": prompt}]
+            }
+            
+            response = requests.post(OPENROUTER_URL, headers=headers, json=payload, timeout=12)
+            if response.status_code == 200:
+                result = response.json()
+                content = result["choices"][0]["message"]["content"].strip()
+                
+                # Nettoyage si l'IA ajoute du texte ou des balises
+                if "{" in content:
+                    content = content[content.find("{"):content.rfind("}")+1]
+                
+                ai_data = json.loads(content)
+                logger.info(f"AI_EXTRACTION_SUCCESS: {ai_data}")
+                
+                # On utilise les résultats de l'IA s'ils semblent valides
+                for key in data:
+                    if ai_data.get(key) and ai_data[key] not in ["Non trouvé", "Non détectée", ""]:
+                        data[key] = ai_data[key]
+            else:
+                logger.error(f"AI_EXTRACTION_FAIL: code={response.status_code} body={response.text}")
+                        
+        except Exception as e:
+            logger.error(f"AI_EXTRACTION_EXCEPTION: {e}")
+            
     return data
 
 
