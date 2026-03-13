@@ -6,6 +6,8 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 # Prevent Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
+# Suppress pip root user warning
+ENV PIP_ROOT_USER_ACTION ignore
 
 # Install system dependencies including Tesseract OCR
 RUN apt-get update \

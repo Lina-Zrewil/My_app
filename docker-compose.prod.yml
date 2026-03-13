@@ -3,7 +3,7 @@
 services:
   backend:
     # IMPORTANT: Assure-toi que ton nom d'utilisateur GitHub est en MINUSCULES ici
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER_LOWERCASE}/maghreb-check-ai-backend:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER_LOWERCASE:-lina-zrewil}/maghreb-check-ai-backend:latest
     # Assuming the data folder needs to be persistent locally
     volumes:
       - ./backend/data:/app/data
@@ -16,7 +16,7 @@ services:
 
   frontend:
     # IMPORTANT: Assure-toi que ton nom d'utilisateur GitHub est en MINUSCULES ici
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER_LOWERCASE}/maghreb-check-ai-frontend:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER_LOWERCASE:-lina-zrewil}/maghreb-check-ai-frontend:latest
     depends_on:
       - backend
     restart: unless-stopped
