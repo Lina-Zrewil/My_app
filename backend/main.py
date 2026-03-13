@@ -269,14 +269,24 @@ async def process_check(request: Request, file: UploadFile = File(...)):
         image = Image.open(BytesIO(contents))
         
         # --- IMAGE PREPROCESSING FOR BETTER OCR ---
-        # 1. Convert to grayscale
+        # 1. Upscale if too small (Targeting ~2000px for better OCR)
+        width, height = image.size
+        if width < 1500 and height < 1500:
+            scale = 2000 / max(width, height)
+            new_size = (int(width * scale), int(height * scale))
+            image = image.resize(new_size, Image.Resampling.LANCZOS)
+            logger.info(f"IMAGE_RESIZED: {width}x{height} -> {new_size[0]}x{new_size[1]}")
+
+        # 2. Convert to grayscale
         gray_image = ImageOps.grayscale(image)
-        # 2. Increase contrast
-        enhancer = ImageEnhance.Contrast(gray_image)
-        contrast_image = enhancer.enhance(2.0)
-        # 3. Increase sharpness
-        sharpener = ImageEnhance.Sharpness(contrast_image)
-        final_image = sharpener.enhance(2.0)
+        
+        # 3. Enhance Contrast and Sharpness
+        contrast = ImageEnhance.Contrast(gray_image).enhance(2.0)
+        sharp = ImageEnhance.Sharpness(contrast).enhance(2.0)
+        
+        # 4. Binarization (Black & White thresholding)
+        # Helps Tesseract isolate text from background noise/patterns
+        final_image = sharp.point(lambda p: 255 if p > 140 else 0)
         
         extracted_text = pytesseract.image_to_string(final_image, lang='fra+ara')
         cheque_data = extract_cheque_data(extracted_text)
