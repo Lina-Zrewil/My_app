@@ -220,8 +220,12 @@ async def chat(request: Request, message: str = Form(...)):
     bot_reply = "Clé OPENROUTER_API_KEY non configurée dans l'environnement."
     if OPENROUTER_API_KEY:
         try:
-            # Try primary model requested by user, fallback to a general router if it fails
-            models_to_try = ["z-ai/glm-4.5-air:free", "openrouter/free"]
+            # Try primary model, fallback to alternatives if it fails
+            models_to_try = [
+                "google/gemini-2.0-flash-exp:free",
+                "meta-llama/llama-3.2-3b-instruct:free",
+                "openrouter/free"
+            ]
             
             headers = {
                 "Authorization": f"Bearer {OPENROUTER_API_KEY}",

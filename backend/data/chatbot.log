@@ -46,3 +46,23 @@
 2026-03-13 20:43:16,121 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=400 body={"error":{"message":"google/gemini-2.0-flash-lite-preview-02-05:free is not a valid model ID","code":400},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
 2026-03-13 21:12:51,149 - ChekScan - INFO - IMAGE_RESIZED: 800x422 -> 2000x1055
 2026-03-13 21:12:53,459 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=401 body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:18:43,532 - ChekScan - INFO - IMAGE_RESIZED: 800x422 -> 2000x1055
+2026-03-13 21:18:45,549 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=401 body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:19:09,357 - ChekScan - INFO - IMAGE_RESIZED: 800x422 -> 2000x1055
+2026-03-13 21:19:11,041 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=401 body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:28:35,386 - ChekScan - INFO - CHAT_TRY: model=z-ai/glm-4.5-air:free
+2026-03-13 21:28:36,339 - ChekScan - ERROR - CHAT_FAIL: model=z-ai/glm-4.5-air:free, status=401, body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:28:36,340 - ChekScan - INFO - CHAT_TRY: model=openrouter/free
+2026-03-13 21:28:37,924 - ChekScan - ERROR - CHAT_FAIL: model=openrouter/free, status=401, body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:36:52,705 - ChekScan - INFO - CHAT_TRY: model=google/gemini-2.0-flash-exp:free
+2026-03-13 21:36:53,468 - ChekScan - ERROR - CHAT_FAIL: model=google/gemini-2.0-flash-exp:free, status=401, body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:36:53,470 - ChekScan - INFO - CHAT_TRY: model=meta-llama/llama-3.2-3b-instruct:free
+2026-03-13 21:36:53,863 - ChekScan - ERROR - CHAT_FAIL: model=meta-llama/llama-3.2-3b-instruct:free, status=401, body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:36:53,868 - ChekScan - INFO - CHAT_TRY: model=openrouter/free
+2026-03-13 21:36:54,312 - ChekScan - ERROR - CHAT_FAIL: model=openrouter/free, status=401, body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:41:01,868 - ChekScan - INFO - CHAT_TRY: model=google/gemini-2.0-flash-exp:free
+2026-03-13 21:41:02,591 - ChekScan - ERROR - CHAT_FAIL: model=google/gemini-2.0-flash-exp:free, status=401, body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:41:02,592 - ChekScan - INFO - CHAT_TRY: model=meta-llama/llama-3.2-3b-instruct:free
+2026-03-13 21:41:03,205 - ChekScan - ERROR - CHAT_FAIL: model=meta-llama/llama-3.2-3b-instruct:free, status=401, body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:41:03,208 - ChekScan - INFO - CHAT_TRY: model=openrouter/free
+2026-03-13 21:41:03,522 - ChekScan - ERROR - CHAT_FAIL: model=openrouter/free, status=401, body={"error":{"message":"User not found.","code":401}}

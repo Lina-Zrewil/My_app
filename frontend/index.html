@@ -63,9 +63,9 @@
                     <h3>{{ labels.upload_title }}</h3>
                     <p class="subtitle" style="margin-bottom: 1.5rem;">{{ labels.upload_subtitle }}</p>
 
-                    <label class="custom-file-upload" style="display: block; width: fit-content; margin: 0 auto;">
-                        <input type="file" name="file" accept="image/*" required>
-                        {{ labels.upload_btn }}
+                    <label class="custom-file-upload" style="display: block; width: fit-content; margin: 0 auto; padding: 0.8rem 1.8rem; cursor: pointer; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59,130,246,0.4); border-radius: 12px; color: #3b82f6; font-weight: 600; font-family: inherit; transition: all 0.3s;">
+                        <input type="file" name="file" accept="image/*" required style="display:none;">
+                        📁 {{ labels.upload_btn }}
                     </label>
                 </div>
 
