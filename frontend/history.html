@@ -54,11 +54,11 @@
             <div class="glass-panel" style="padding:1.5rem;">
                 <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:10px; word-break:break-all;">{{
                     scan.filename }}</h3>
-                <div style="font-size:0.9rem; color:var(--text-muted); margin-bottom:5px;">📅 {{ scan.date }}</div>
-                <div style="font-size:0.9rem; margin-bottom:5px;"><strong>{{ labels.bank }}:</strong> {{ scan.bank_name
-                    }}</div>
-                <div style="font-size:1.2rem; margin-bottom:10px; color:#10b981; font-weight:bold;">{{ scan.amount }}
-                    MAD</div>
+                <div style="font-size:0.9rem; color:var(--text-muted); margin-bottom:5px;">📅 {{ scan.date }} - {{ scan.place }}</div>
+                <div style="font-size:0.9rem; margin-bottom:5px;"><strong>{{ labels.bank }}:</strong> {{ scan.bank_name }}</div>
+                <div style="font-size:0.9rem; margin-bottom:10px;"><strong>{{ labels.payee }}:</strong> {{ scan.payee }}</div>
+                <div style="font-size:1.2rem; margin-bottom:10px; color:#10b981; font-weight:bold;">{{ scan.amount }} MAD</div>
+                <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px; line-height:1.2;">{{ scan.amount_words }}</div>
                 <div
                     style="font-size:0.8rem; font-family:monospace; background:rgba(0,0,0,0.3); padding:5px; border-radius:4px; direction:ltr; text-align:left;">
                     {{ scan.micr }}

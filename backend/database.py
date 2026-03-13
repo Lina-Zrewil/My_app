@@ -18,19 +18,32 @@ def init_db():
             amount TEXT,
             date TEXT,
             micr TEXT,
+            payee TEXT,
+            amount_words TEXT,
+            place TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    
+    # Migrations (Add columns if they don't exist)
+    try:
+        cursor.execute("ALTER TABLE scans ADD COLUMN payee TEXT")
+        cursor.execute("ALTER TABLE scans ADD COLUMN amount_words TEXT")
+        cursor.execute("ALTER TABLE scans ADD COLUMN place TEXT")
+    except sqlite3.OperationalError:
+        # Columns probably already exist
+        pass
+        
     conn.commit()
     conn.close()
 
-def save_scan_db(filename, bank_name, amount, date, micr):
+def save_scan_db(filename, bank_name, amount, date, micr, payee="", amount_words="", place=""):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO scans (filename, bank_name, amount, date, micr)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (filename, bank_name, amount, date, micr))
+        INSERT INTO scans (filename, bank_name, amount, date, micr, payee, amount_words, place)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (filename, bank_name, amount, date, micr, payee, amount_words, place))
     conn.commit()
     conn.close()
 

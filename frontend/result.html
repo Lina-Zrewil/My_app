@@ -55,14 +55,27 @@
 
             <div class="data-card glass-panel mt-4">
                 <form class="modern-form">
-                    <div class="form-row">
                         <div class="form-group flex-2">
                             <label>{{ labels.bank }}</label>
-                            <input type="text" value="{{ data.bankName }}" readonly>
+                            <input type="text" value="{{ data.bank_name }}" readonly>
                         </div>
                         <div class="form-group flex-1">
                             <label class="highlight-label">{{ labels.amount }}</label>
-                            <input type="text" value="{{ data.amountNum }}" readonly class="amount-input">
+                            <input type="text" value="{{ data.amount }}" readonly class="amount-input">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label>{{ labels.amount_words }}</label>
+                            <input type="text" value="{{ data.amount_words }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label>{{ labels.payee }}</label>
+                            <input type="text" value="{{ data.payee }}" readonly>
                         </div>
                     </div>
 
@@ -71,6 +84,13 @@
                             <label>{{ labels.date }}</label>
                             <input type="text" value="{{ data.date }}" readonly>
                         </div>
+                        <div class="form-group flex-2">
+                            <label>{{ labels.place }}</label>
+                            <input type="text" value="{{ data.place }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group flex-2">
                             <label>{{ labels.micr }}</label>
                             <input type="text" value="{{ data.micr }}" readonly class="font-mono"
@@ -82,10 +102,13 @@
                 <!-- SAVE SCAN FORM -->
                 <form action="/save_scan" method="POST" style="margin-top:20px;">
                     <input type="hidden" name="filename" value="{{ filename }}">
-                    <input type="hidden" name="bank_name" value="{{ data.bankName }}">
-                    <input type="hidden" name="amount" value="{{ data.amountNum }}">
+                    <input type="hidden" name="bank_name" value="{{ data.bank_name }}">
+                    <input type="hidden" name="amount" value="{{ data.amount }}">
                     <input type="hidden" name="date" value="{{ data.date }}">
                     <input type="hidden" name="micr" value="{{ data.micr }}">
+                    <input type="hidden" name="payee" value="{{ data.payee }}">
+                    <input type="hidden" name="amount_words" value="{{ data.amount_words }}">
+                    <input type="hidden" name="place" value="{{ data.place }}">
                     <button type="submit" class="btn w-full"
                         style="background:#10b981; color:white; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
                         {{ labels.save_scan }}

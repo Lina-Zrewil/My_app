@@ -94,27 +94,30 @@ def get_context(request: Request):
 def extract_cheque_data(text: str) -> dict:
     # 1. Regex Baseline (Fallback)
     data = {
-        "bankName": "Non détectée",
-        "amountNum": "Non trouvé",
+        "bank_name": "Non détectée",
+        "amount": "Non trouvé",
+        "payee": "Non trouvé",
+        "amount_words": "Non trouvé",
         "date": "Non trouvée",
+        "place": "Non trouvé",
         "micr": "Non détectée"
     }
     
     lower_text = text.lower()
     if "attijariwafa" in lower_text or "wafa" in lower_text:
-        data["bankName"] = "Attijariwafa Bank"
+        data["bank_name"] = "Attijariwafa Bank"
     elif "cih" in lower_text:
-        data["bankName"] = "CIH Bank"
+        data["bank_name"] = "CIH Bank"
     elif "bmce" in lower_text or "boa" in lower_text:
-        data["bankName"] = "BOA / BMCE"
+        data["bank_name"] = "BOA / BMCE"
     elif "populaire" in lower_text or "bcp" in lower_text:
-        data["bankName"] = "Banque Populaire"
+        data["bank_name"] = "Banque Populaire"
     elif "generale" in lower_text or "sg" in lower_text:
-        data["bankName"] = "Société Générale"
+        data["bank_name"] = "Société Générale"
 
     amount_match = re.search(r'(?:#|dh|mad)?\s*(\d{1,3}(?:[ .,]\d{3})*(?:[.,]\d{2}))\s*(?:#|dh|mad)?', text, re.IGNORECASE)
     if amount_match:
-        data["amountNum"] = amount_match.group(1).replace(' ', '').replace(',', '.')
+        data["amount"] = amount_match.group(1).replace(' ', '').replace(',', '.')
 
     date_match = re.search(r'\b(\d{2}[/-]\d{2}[/-]\d{4})\b', text)
     if date_match:
@@ -131,8 +134,11 @@ def extract_cheque_data(text: str) -> dict:
             Tu es un expert en lecture de chèques marocains. Analyse ce texte OCR et extrait les données.
             Réponds UNIQUEMENT avec un objet JSON structuré comme ceci:
             {{
-              "bankName": "Nom de la banque",
-              "amountNum": "Le montant en chiffres (ex: 1250.00)",
+              "bank_name": "Nom de la banque",
+              "amount": "Le montant en chiffres (ex: 1250.00)",
+              "payee": "Le bénéficiaire",
+              "amount_words": "Le montant en lettres",
+              "place": "Le lieu d'émission",
               "date": "La date au format JJ/MM/AAAA",
               "micr": "Les chiffres magnétiques en bas du chèque"
             }}
@@ -310,9 +316,12 @@ async def save_scan(
     bank_name: str = Form(...),
     amount: str = Form(...),
     date: str = Form(...),
-    micr: str = Form(...)
+    micr: str = Form(...),
+    payee: str = Form(""),
+    amount_words: str = Form(""),
+    place: str = Form("")
 ):
-    save_scan_db(filename, bank_name, amount, date, micr)
+    save_scan_db(filename, bank_name, amount, date, micr, payee, amount_words, place)
     return RedirectResponse(url="/history", status_code=303)
 
 
