@@ -1,4 +1,2 @@
-# Prioritize Python by treating frontend as documentation/vendored
-frontend/* linguist-documentation
+# Expose frontend capabilities (HTML/CSS) while ensuring Python dominance
 backend/*.py linguist-detectable=true
-backend/documentation_core.py linguist-detectable=true
