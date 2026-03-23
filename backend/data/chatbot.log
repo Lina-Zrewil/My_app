@@ -66,3 +66,41 @@
 2026-03-13 21:41:03,205 - ChekScan - ERROR - CHAT_FAIL: model=meta-llama/llama-3.2-3b-instruct:free, status=401, body={"error":{"message":"User not found.","code":401}}
 2026-03-13 21:41:03,208 - ChekScan - INFO - CHAT_TRY: model=openrouter/free
 2026-03-13 21:41:03,522 - ChekScan - ERROR - CHAT_FAIL: model=openrouter/free, status=401, body={"error":{"message":"User not found.","code":401}}
+2026-03-13 21:47:11,215 - ChekScan - INFO - IMAGE_RESIZED: 800x422 -> 2000x1055
+2026-03-13 21:47:13,593 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=404 body={"error":{"message":"No endpoints found for google/gemini-2.0-flash-exp:free.","code":404},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-13 21:47:24,824 - ChekScan - INFO - CHAT_TRY: model=google/gemini-2.0-flash-exp:free
+2026-03-13 21:47:25,577 - ChekScan - ERROR - CHAT_FAIL: model=google/gemini-2.0-flash-exp:free, status=404, body={"error":{"message":"No endpoints found for google/gemini-2.0-flash-exp:free.","code":404},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-13 21:47:25,580 - ChekScan - INFO - CHAT_TRY: model=meta-llama/llama-3.2-3b-instruct:free
+2026-03-13 21:47:26,413 - ChekScan - ERROR - CHAT_FAIL: model=meta-llama/llama-3.2-3b-instruct:free, status=429, body={"error":{"message":"Provider returned error","code":429,"metadata":{"raw":"meta-llama/llama-3.2-3b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations","provider_name":"Venice","is_byok":false}},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-13 21:47:26,417 - ChekScan - INFO - CHAT_TRY: model=openrouter/free
+2026-03-13 21:47:37,862 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/free
+2026-03-13 21:47:51,293 - ChekScan - INFO - IMAGE_RESIZED: 800x422 -> 2000x1055
+2026-03-13 21:47:53,026 - ChekScan - ERROR - AI_EXTRACTION_FAIL: code=404 body={"error":{"message":"No endpoints found for google/gemini-2.0-flash-exp:free.","code":404},"user_id":"user_36IB5DzymEAPBroaSc0xUyoLvzh"}
+2026-03-13 21:55:29,474 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto
+2026-03-13 21:55:41,089 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 17:18:24,409 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto
+2026-03-23 17:18:44,966 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 17:22:09,412 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto
+2026-03-23 17:22:17,772 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 17:24:35,751 - ChekScan - INFO - IMAGE_RESIZED: 264x148 -> 2000x1121
+2026-03-23 17:24:39,900 - ChekScan - INFO - AI_EXTRACTION_SUCCESS: {'bank_name': 'Non trouvé', 'amount': 'Non trouvé', 'payee': 'Non trouvé', 'amount_words': 'Non trouvé', 'place': 'Non trouvé', 'date': 'Non trouvé', 'micr': 'Non trouvé'}
+2026-03-23 17:25:07,812 - ChekScan - INFO - IMAGE_RESIZED: 800x350 -> 2000x875
+2026-03-23 17:25:12,966 - ChekScan - INFO - AI_EXTRACTION_SUCCESS: {'bank_name': 'CIH BANK', 'amount': '2500.50', 'payee': 'Non trouvé', 'amount_words': 'Non trouvé', 'place': 'Non trouvé', 'date': '08/11/2025', 'micr': '987654321 230 9876543210987654 02'}
+2026-03-23 17:25:49,355 - ChekScan - INFO - IMAGE_RESIZED: 270x148 -> 2000x1096
+2026-03-23 17:25:56,705 - ChekScan - INFO - AI_EXTRACTION_SUCCESS: {'bank_name': 'CIH BANK (CIM D HASX indique une agence possible mais CIH BANK est plus probable comme nom de banque)', 'amount': 'Non trouvé', 'payee': 'Non trouvé', 'amount_words': 'Non trouvé', 'place': 'Non trouvé', 'date': 'Non trouvé', 'micr': '1313, 12-3850008 26860327221 3,021320062-'}
+2026-03-23 19:11:24,308 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto
+2026-03-23 19:11:34,653 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 19:11:59,072 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto
+2026-03-23 19:12:17,026 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 19:12:40,405 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto
+2026-03-23 19:12:52,424 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 19:19:02,738 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto
+2026-03-23 19:19:12,006 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 19:21:12,800 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto
+2026-03-23 19:21:24,220 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 19:25:59,483 - ChekScan - INFO - CHAT_TRY: model=openrouter/auto, history_length=2
+2026-03-23 19:26:10,611 - ChekScan - INFO - CHAT_SUCCESS: model=openrouter/auto
+2026-03-23 19:43:08,058 - ChekScan - INFO - IMAGE_RESIZED: 270x148 -> 2000x1096
+2026-03-23 19:43:15,152 - ChekScan - INFO - AI_EXTRACTION_SUCCESS: {'bank_name': 'Non trouvé', 'amount': 'Non trouvé', 'payee': 'Non trouvé', 'amount_words': 'Non trouvé', 'place': 'Non trouvé', 'date': 'Non trouvé', 'micr': '1313, 12-3850008 26860327221 3,021320062-'}
+2026-03-23 19:43:36,645 - ChekScan - INFO - IMAGE_RESIZED: 800x350 -> 2000x875
+2026-03-23 19:43:41,478 - ChekScan - INFO - AI_EXTRACTION_SUCCESS: {'bank_name': 'ATTIJARIWAFA BANK', 'amount': '15000.00', 'payee': 'Non trouvé', 'amount_words': 'Non trouvé', 'place': 'Non trouvé', 'date': '12/05/2026', 'micr': '123456789047123456789012345601'}
