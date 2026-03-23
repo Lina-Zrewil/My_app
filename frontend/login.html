@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ labels.dir }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ labels.title }} - Login</title>
+    <link rel="icon" type="image/png" href="/static/assets/logo.png">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="{{ theme_class }}" style="display:flex; justify-content:center; align-items:center; min-height:100vh; background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), var(--bg-main);">
+    
+    <div class="glass-panel" style="width:100%; max-width:400px; padding:3rem; text-align:center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+        <div style="display:flex; justify-content:center; align-items:center; margin-bottom:0.5rem;">
+            <img src="/static/assets/logo.png" alt="" style="width:30px; height:30px; margin-right:10px;">
+            <h1 style="font-size:2rem; font-weight:800; margin:0;">Chek<span style="color:var(--primary);">Scan</span></h1>
+        </div>
+        <p style="color:var(--text-muted); margin-bottom:2.5rem; font-size:0.9rem;">Veuillez vous connecter pour accéder à votre SaaS privé.</p>
+        
+        {% if error %}
+        <div style="background:rgba(239,68,68,0.2); color:#ef4444; padding:12px; border-radius:10px; margin-bottom:20px; font-weight:600; font-size:0.9rem;">{{ error }}</div>
+        {% endif %}
+        {% if request.query_params.get("registered") %}
+        <div style="background:rgba(16,185,129,0.2); color:#10b981; padding:12px; border-radius:10px; margin-bottom:20px; font-weight:600; font-size:0.9rem;">Compte créé avec succès ! Connectez-vous.</div>
+        {% endif %}
+
+        <form action="/login" method="POST" style="display:flex; flex-direction:column; gap:1.2rem; text-align:left;">
+            <div>
+                <label style="display:block; margin-bottom:6px; font-weight:600; font-size:0.9rem;">Adresse Email</label>
+                <input type="email" name="email" required placeholder="contact@entreprise.com" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--glass-border); background:rgba(0,0,0,0.15); color:var(--text-main); font-family:'Outfit', sans-serif; transition: all 0.3s;">
+            </div>
+            <div>
+                <label style="display:block; margin-bottom:6px; font-weight:600; font-size:0.9rem;">Mot de passe</label>
+                <input type="password" name="password" required placeholder="••••••••" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--glass-border); background:rgba(0,0,0,0.15); color:var(--text-main); font-family:'Outfit', sans-serif; transition: all 0.3s;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="padding:14px; font-size:1rem; margin-top:0.5rem; border-radius:12px; width:100%; justify-content:center;">🔓 Se Connecter</button>
+        </form>
+        
+        <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--glass-border);">
+            <p style="margin:0; color:var(--text-muted); font-size:0.9rem;">Pas encore de compte ? <br><a href="/register" style="display:inline-block; margin-top:8px; color:var(--primary); text-decoration:none; font-weight:600;">S'inscrire gratuitement</a></p>
+        </div>
+    </div>
+</body>
+</html>

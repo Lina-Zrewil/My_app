@@ -53,69 +53,58 @@
             </div>
             {% else %}
 
-            <div class="data-card glass-panel mt-4">
-                <form class="modern-form">
+            <form action="/save_scan" method="POST" class="data-card glass-panel mt-4 modern-form">
+                    <input type="hidden" name="filename" value="{{ filename }}">
+                    
+                    <div class="form-row">
                         <div class="form-group flex-2">
-                            <label>{{ labels.bank }}</label>
-                            <input type="text" value="{{ data.bank_name }}" readonly>
+                            <label>{{ labels.bank }} <span style="font-size:10px; color:#bbb;">(Éditable)</span></label>
+                            <input type="text" name="bank_name" value="{{ data.bank_name }}" required>
                         </div>
                         <div class="form-group flex-1">
                             <label class="highlight-label">{{ labels.amount }}</label>
-                            <input type="text" value="{{ data.amount }}" readonly class="amount-input">
+                            <input type="text" name="amount" value="{{ data.amount }}" class="amount-input" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group flex-1">
                             <label>{{ labels.amount_words }}</label>
-                            <input type="text" value="{{ data.amount_words }}" readonly>
+                            <input type="text" name="amount_words" value="{{ data.amount_words }}">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group flex-2">
                             <label>{{ labels.payee }}</label>
-                            <input type="text" value="{{ data.payee }}" readonly>
+                            <input type="text" name="payee" value="{{ data.payee }}">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group flex-1">
                             <label>{{ labels.date }}</label>
-                            <input type="text" value="{{ data.date }}" readonly>
+                            <input type="text" name="date" value="{{ data.date }}" required>
                         </div>
                         <div class="form-group flex-2">
                             <label>{{ labels.place }}</label>
-                            <input type="text" value="{{ data.place }}" readonly>
+                            <input type="text" name="place" value="{{ data.place }}">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group flex-2">
                             <label>{{ labels.micr }}</label>
-                            <input type="text" value="{{ data.micr }}" readonly class="font-mono"
-                                style="direction:ltr; text-align:left;">
+                            <input type="text" name="micr" value="{{ data.micr }}" class="font-mono"
+                                style="direction:ltr; text-align:left;" required>
                         </div>
                     </div>
-                </form>
 
-                <!-- SAVE SCAN FORM -->
-                <form action="/save_scan" method="POST" style="margin-top:20px;">
-                    <input type="hidden" name="filename" value="{{ filename }}">
-                    <input type="hidden" name="bank_name" value="{{ data.bank_name }}">
-                    <input type="hidden" name="amount" value="{{ data.amount }}">
-                    <input type="hidden" name="date" value="{{ data.date }}">
-                    <input type="hidden" name="micr" value="{{ data.micr }}">
-                    <input type="hidden" name="payee" value="{{ data.payee }}">
-                    <input type="hidden" name="amount_words" value="{{ data.amount_words }}">
-                    <input type="hidden" name="place" value="{{ data.place }}">
                     <button type="submit" class="btn w-full"
-                        style="background:#10b981; color:white; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
+                        style="background:#10b981; color:white; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); margin-top: 20px;">
                         {{ labels.save_scan }}
                     </button>
-                </form>
-
-            </div>
+            </form>
             {% endif %}
 
             <div class="mt-4" style="text-align:center;">

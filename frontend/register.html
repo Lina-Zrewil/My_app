@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ labels.dir }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ labels.title }} - S'inscrire</title>
+    <link rel="icon" type="image/png" href="/static/assets/logo.png">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="{{ theme_class }}" style="display:flex; justify-content:center; align-items:center; min-height:100vh; background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), var(--bg-main);">
+    
+    <div class="glass-panel" style="width:100%; max-width:400px; padding:3rem; text-align:center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+        <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:0.5rem;">Créer un Compté</h1>
+        <p style="color:var(--text-muted); margin-bottom:2rem; font-size:0.9rem;">Rejoignez ChekScan pour gérer votre comptabilité de manière privée.</p>
+        
+        {% if error %}
+        <div style="background:rgba(239,68,68,0.2); color:#ef4444; padding:12px; border-radius:10px; margin-bottom:20px; font-weight:600; font-size:0.9rem;">{{ error }}</div>
+        {% endif %}
+
+        <form action="/register" method="POST" style="display:flex; flex-direction:column; gap:1.2rem; text-align:left;">
+            <div>
+                <label style="display:block; margin-bottom:6px; font-weight:600; font-size:0.9rem;">Nom d'utilisateur / Société</label>
+                <input type="text" name="username" required placeholder="Mon Entreprise SARL" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--glass-border); background:rgba(0,0,0,0.15); color:var(--text-main); font-family:'Outfit', sans-serif;">
+            </div>
+            <div>
+                <label style="display:block; margin-bottom:6px; font-weight:600; font-size:0.9rem;">Adresse Email</label>
+                <input type="email" name="email" required placeholder="contact@entreprise.com" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--glass-border); background:rgba(0,0,0,0.15); color:var(--text-main); font-family:'Outfit', sans-serif;">
+            </div>
+            <div>
+                <label style="display:block; margin-bottom:6px; font-weight:600; font-size:0.9rem;">Mot de passe fort</label>
+                <input type="password" name="password" required placeholder="••••••••" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--glass-border); background:rgba(0,0,0,0.15); color:var(--text-main); font-family:'Outfit', sans-serif;">
+            </div>
+            <button type="submit" class="btn" style="background:#10b981; color:white; padding:14px; font-size:1rem; margin-top:0.5rem; border-radius:12px; width:100%; justify-content:center; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);">✨ S'inscrire gratuitement</button>
+        </form>
+        
+        <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--glass-border);">
+            <p style="margin:0; color:var(--text-muted); font-size:0.9rem;">Déjà inscrit ? <a href="/login" style="color:#10b981; text-decoration:none; font-weight:600;">Se connecter</a></p>
+        </div>
+    </div>
+</body>
+</html>

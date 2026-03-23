@@ -86,7 +86,8 @@
                     {% endif %}
                 </div>
                 <div class="chat-body"
-                    style="overflow-y:auto; flex:1; max-height:400px; display:flex; flex-direction:column; justify-content:flex-end;">
+                    style="overflow-y:auto; flex:1; max-height:400px; display:flex; flex-direction:column;">
+                    <div style="margin-top:auto;"></div>
 
                     {% if not chats %}
                     <div class="msg msg-bot">
@@ -101,6 +102,7 @@
                     {% endif %}
                     {% endfor %}
                     {% endif %}
+                    <div id="chat-bottom"></div>
                 </div>
 
                 <form action="/chat" method="POST" class="chat-form"

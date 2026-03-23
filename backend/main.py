@@ -11,8 +11,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
 import json
+import uuid
+import hashlib
 
-from database import init_db, save_scan_db, get_all_scans
+from database import init_db, save_scan_db, get_all_scans, create_user, get_user_by_email, get_user_by_id, delete_scan, delete_all_scans
 from labels import LABELS
 
 app = FastAPI(title="ChekScan", version="2.0.0")
@@ -39,6 +41,26 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger("ChekScan")
+
+SESSIONS = {}
+
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def get_current_user_id(request: Request):
+    return SESSIONS.get(request.cookies.get("session_id"))
+
+@app.middleware("http")
+async def auth_middleware(request: Request, call_next):
+    public_paths = ["/login", "/register", "/health"]
+    if request.url.path.startswith("/static/") or request.url.path in public_paths:
+        return await call_next(request)
+        
+    if not get_current_user_id(request):
+        return RedirectResponse(url="/login", status_code=303)
+        
+    return await call_next(request)
+
 @app.get("/health")
 async def health():
     return {"status": "alive", "port": os.environ.get("PORT")}
@@ -156,7 +178,7 @@ def extract_cheque_data(text: str) -> dict:
                 "X-Title": "ChekScan AI Extraction"
             }
             payload = {
-                "model": "google/gemini-2.0-flash-exp:free",
+                "model": "openrouter/auto",
                 "messages": [{"role": "user", "content": prompt}]
             }
             
@@ -211,6 +233,48 @@ async def set_lang(request: Request, lang: str):
     response.set_cookie(key="lang", value=lang, httponly=True)
     return response
 
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    ctx = {"request": request}
+    ctx.update(get_context(request))
+    return templates.TemplateResponse("login.html", ctx)
+
+@app.post("/login")
+async def login_post(request: Request, email: str = Form(...), password: str = Form(...)):
+    user = get_user_by_email(email)
+    if user and user["password_hash"] == hash_password(password):
+        session_id = str(uuid.uuid4())
+        SESSIONS[session_id] = user["id"]
+        response = RedirectResponse(url="/", status_code=303)
+        response.set_cookie("session_id", session_id, max_age=7*24*3600)
+        return response
+    ctx = {"request": request, "error": "Email ou mot de passe incorrect."}
+    ctx.update(get_context(request))
+    return templates.TemplateResponse("login.html", ctx)
+
+@app.get("/register", response_class=HTMLResponse)
+async def register_page(request: Request):
+    ctx = {"request": request}
+    ctx.update(get_context(request))
+    return templates.TemplateResponse("register.html", ctx)
+
+@app.post("/register")
+async def register_post(request: Request, email: str = Form(...), username: str = Form(...), password: str = Form(...)):
+    if create_user(email, username, hash_password(password)):
+        return RedirectResponse(url="/login?registered=1", status_code=303)
+    ctx = {"request": request, "error": "Cet email est déjà utilisé."}
+    ctx.update(get_context(request))
+    return templates.TemplateResponse("register.html", ctx)
+
+@app.get("/logout")
+async def logout(request: Request):
+    session_id = request.cookies.get("session_id")
+    if session_id in SESSIONS:
+        del SESSIONS[session_id]
+    response = RedirectResponse(url="/login", status_code=303)
+    response.delete_cookie("session_id")
+    return response
+
 
 @app.post("/chat")
 async def chat(request: Request, message: str = Form(...)):
@@ -220,11 +284,11 @@ async def chat(request: Request, message: str = Form(...)):
     bot_reply = "Clé OPENROUTER_API_KEY non configurée dans l'environnement."
     if OPENROUTER_API_KEY:
         try:
-            # Try primary model, fallback to alternatives if it fails
+            # Use openrouter/auto which routes to the best available free model
             models_to_try = [
-                "google/gemini-2.0-flash-exp:free",
-                "meta-llama/llama-3.2-3b-instruct:free",
-                "openrouter/free"
+                "openrouter/auto",
+                "openrouter/free",
+                "meta-llama/llama-3.2-3b-instruct:free"
             ]
             
             headers = {
@@ -234,16 +298,22 @@ async def chat(request: Request, message: str = Form(...)):
                 "X-Title": "ChekScan Masterpiece"
             }
             
+            api_messages = [
+                {"role": "system", "content": "Tu es un assistant bancaire expert pour l'application ChekScan. Règle absolue : Tu dois STRICTEMENT répondre dans la langue exacte de l'utilisateur (Français, Arabe classique, ou Darija marocaine). Garde le contexte de la conversation."}
+            ]
+            
+            # Map our internal CHAT_HISTORY format to OpenRouter's required format
+            for chat in CHAT_HISTORY:
+                role = "assistant" if chat["role"] == "bot" else "user"
+                api_messages.append({"role": role, "content": chat["text"]})
+                
             for model_id in models_to_try:
                 data = {
                     "model": model_id,
-                    "messages": [
-                        {"role": "system", "content": "Tu es un assistant bancaire pour ChekScan. Réponds aux questions de manière concise et utile en français ou arabe selon la demande."},
-                        {"role": "user", "content": message}
-                    ]
+                    "messages": api_messages
                 }
                 
-                logger.info(f"CHAT_TRY: model={model_id}")
+                logger.info(f"CHAT_TRY: model={model_id}, history_length={len(api_messages)}")
                 response = requests.post(OPENROUTER_URL, headers=headers, json=data, timeout=20)
                 
                 if response.status_code == 200:
@@ -266,13 +336,15 @@ async def chat(request: Request, message: str = Form(...)):
             logger.exception("CHAT_EXCEPTION")
             
     CHAT_HISTORY.append({"role": "bot", "text": bot_reply})
-    return RedirectResponse(url=referer, status_code=303)
+    redirect_url = referer.split('#')[0] + "#chat-bottom"
+    return RedirectResponse(url=redirect_url, status_code=303)
 
 @app.get("/clear_chat")
 async def clear_chat(request: Request):
     referer = request.headers.get("referer") or "/"
     CHAT_HISTORY.clear()
-    return RedirectResponse(url=referer, status_code=303)
+    redirect_url = referer.split('#')[0]
+    return RedirectResponse(url=redirect_url, status_code=303)
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -337,14 +409,71 @@ async def save_scan(
     amount_words: str = Form(""),
     place: str = Form("")
 ):
-    save_scan_db(filename, bank_name, amount, date, micr, payee, amount_words, place)
+    uid = get_current_user_id(request)
+    save_scan_db(uid, filename, bank_name, amount, date, micr, payee, amount_words, place)
     return RedirectResponse(url="/history", status_code=303)
 
+
+import csv
+from io import StringIO
+
+@app.get("/export_csv")
+async def export_csv(request: Request):
+    uid = get_current_user_id(request)
+    scans = get_all_scans(uid)
+    output = StringIO()
+    writer = csv.writer(output, delimiter=';')
+    
+    writer.writerow(["ID", "Fichier", "Banque", "Montant", "Date", "MICR", "Beneficiaire", "Montant_Lettres", "Lieu"])
+    
+    for scan in scans:
+        writer.writerow([
+            scan.get("id", ""), scan.get("filename", ""), scan.get("bank_name", ""),
+            scan.get("amount", ""), scan.get("date", ""), scan.get("micr", ""),
+            scan.get("payee", ""), scan.get("amount_words", ""), scan.get("place", "")
+        ])    
+    
+    output.seek(0)
+    csv_content = "\ufeff" + output.getvalue()
+    return Response(content=csv_content, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=chekscan_export.csv"})
 
 @app.get("/history", response_class=HTMLResponse)
 async def history(request: Request):
     ctx = {"request": request}
     ctx.update(get_context(request))
-    scans = get_all_scans()
-    ctx.update({"scans": scans})
+    uid = get_current_user_id(request)
+    scans = get_all_scans(uid)
+    
+    bank_counts = {}
+    total_amount = 0.0
+    for scan in scans:
+        b_name = scan.get("bank_name", "Inconnue")
+        if b_name.strip() == "": b_name = "Inconnue"
+        bank_counts[b_name] = bank_counts.get(b_name, 0) + 1
+        
+        amt_str = str(scan.get("amount", "0")).replace(' ', '').replace(',', '.')
+        try:
+            total_amount += float(amt_str)
+        except ValueError:
+            pass
+
+    stats = {
+        "labels": list(bank_counts.keys()),
+        "data": list(bank_counts.values())
+    }
+    
+    total_disp = f"{total_amount:,.2f}".replace(',', ' ')
+    ctx.update({"scans": scans, "stats": json.dumps(stats), "total_amount_display": total_disp})
     return templates.TemplateResponse("history.html", ctx)
+
+@app.post("/delete_scan/{scan_id}")
+async def delete_scan_route(request: Request, scan_id: int):
+    uid = get_current_user_id(request)
+    delete_scan(uid, scan_id)
+    return RedirectResponse(url="/history", status_code=303)
+
+@app.post("/delete_all")
+async def delete_all_scans_route(request: Request):
+    uid = get_current_user_id(request)
+    delete_all_scans(uid)
+    return RedirectResponse(url="/history", status_code=303)

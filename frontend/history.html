@@ -40,7 +40,22 @@
     </header>
 
     <main class="container mt-4" style="padding-top:2rem;">
-        <h2>{{ labels.history_title }}</h2>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:10px;">
+            <h2 style="margin:0;">{{ labels.history_title }}</h2>
+            <div style="display:flex; gap:10px; align-items:center;">
+                {% if scans %}
+                <form action="/delete_all" method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir Vider tout l\'historique ? Cette action est irréversible.')">
+                    <button type="submit" class="btn" style="background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid rgba(239,68,68,0.3); padding:0.6rem 1.2rem; border-radius:8px; font-weight:600; font-size:0.9rem;" title="Supprimer tout">
+                        🗑️ Vider l'historique
+                    </button>
+                </form>
+                {% endif %}
+                <a href="/export_csv" class="btn" style="background:#10b981; color:white; padding:0.6rem 1.2rem; border-radius:8px; text-decoration:none; font-weight:600; box-shadow:0 4px 10px rgba(16,185,129,0.3);">
+                    📥 Exporter Excel (CSV)
+                </a>
+            </div>
+        </div>
 
         {% if not scans %}
         <div class="glass-panel text-center mt-4">
@@ -48,11 +63,26 @@
             <a href="/" class="btn btn-primary mt-4" style="text-decoration:none;">{{ labels.new_scan }}</a>
         </div>
         {% else %}
+        <!-- Dashboard Section -->
+        <div class="glass-panel" style="margin-bottom:2rem; padding:2rem; display:flex; flex-wrap:wrap; gap:2rem; align-items:center; justify-content:space-around;">
+            <div style="text-align:center;">
+                <div style="font-size:0.9rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-weight:800;">Montant Total Historique</div>
+                <div style="font-size:2.8rem; font-weight:800; color:var(--primary); margin-top:0.5rem;">{{ total_amount_display }} <span style="font-size:1.2rem;">MAD</span></div>
+            </div>
+            <div style="width:100%; max-width:350px; height:220px; position:relative;">
+                <canvas id="bankChart"></canvas>
+            </div>
+        </div>
+
         <div class="history-grid mt-4"
             style="display:grid; gap:1.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
             {% for scan in scans %}
-            <div class="glass-panel" style="padding:1.5rem;">
-                <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:10px; word-break:break-all;">{{
+            <div class="glass-panel" style="padding:1.5rem; position:relative;">
+                <form action="/delete_scan/{{ scan.id }}" method="POST" style="position:absolute; top:1.5rem; right:1.5rem;">
+                    <button type="submit" style="background:none; border:none; cursor:pointer; font-size:1.2rem; color:rgba(239,68,68,0.5); transition:color 0.3s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='rgba(239,68,68,0.5)'" title="Supprimer ce chèque">🗑️</button>
+                </form>
+                
+                <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:10px; word-break:break-all; padding-right:2rem;">{{
                     scan.filename }}</h3>
                 <div style="font-size:0.9rem; color:var(--text-muted); margin-bottom:5px;">📅 {{ scan.date }} - {{ scan.place }}</div>
                 <div style="font-size:0.9rem; margin-bottom:5px;"><strong>{{ labels.bank }}:</strong> {{ scan.bank_name }}</div>
@@ -66,6 +96,35 @@
             </div>
             {% endfor %}
         </div>
+
+        <!-- Load Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const rawStats = {{ stats | safe }};
+            const ctx = document.getElementById('bankChart').getContext('2d');
+            const isLight = document.body.classList.contains('light-mode');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: rawStats.labels,
+                    datasets: [{
+                        data: rawStats.data,
+                        backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6', '#ec4899', '#f59e0b', '#14b8a6'],
+                        borderWidth: 2,
+                        borderColor: isLight ? '#ffffff' : '#1e1e24'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { position: 'right', labels: { color: isLight ? '#333' : '#cbd5e1', padding: 20, font: {family: 'Outfit', size:12} } }
+                    }
+                }
+            });
+        </script>
         {% endif %}
     </main>
 
